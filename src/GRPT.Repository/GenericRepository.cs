@@ -1,4 +1,5 @@
-﻿using GRPT.Repository.Database;
+
+using GRPT.Repository.Database;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -250,5 +251,6 @@ namespace GRPT.Repository
         }
 
         #endregion
-    }
-}
+        }
+        
+       }
