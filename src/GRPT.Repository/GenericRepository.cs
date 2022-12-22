@@ -72,6 +72,25 @@ namespace GRPT.Repository
 
 
         /// <summary>
+        /// Get all data list of including join properties.
+        /// </summary>
+        /// <param name="includeProperties"></param>
+        /// <returns></returns>
+        public async Task<IEnumerable<T>> GetAllAsync<T>(params Expression<Func<T, object>>[] includeProperties) where T : class, IAudit
+        {
+            var data = _context.Set<T>();
+
+            if (includeProperties != null)
+            {
+                foreach (var property in includeProperties)
+                    await data.Include(property).LoadAsync();
+            }
+
+            return await data.ToListAsync();
+
+        }
+
+        /// <summary>
         /// Get Entity based on given condition
         /// </summary>
         /// <param name="filter"></param>
@@ -251,6 +270,6 @@ namespace GRPT.Repository
         }
 
         #endregion
-        }
-        
-       }
+    }
+
+}
