@@ -42,6 +42,13 @@ namespace GRPT.Repository
         /// <returns></returns>
         public Task<IEnumerable<T>> GetAllAsync<T>(Expression<Func<T, bool>> filter, params Expression<Func<T, object>>[] includeProperties) where T : class, IAudit;
 
+        /// <summary>
+        /// Get all data list of including join properties.
+        /// </summary>
+        /// <param name="includeProperties"></param>
+        /// <returns></returns>
+        public Task<IEnumerable<T>> GetAllAsync<T>(params Expression<Func<T, object>>[] includeProperties) where T : class, IAudit;
+
 
         /// <summary>
         /// Get Entity based on given condition
