@@ -117,7 +117,6 @@ namespace GRPT.Repository.Database
                 entity.HasOne(d => d.Manager)
                     .WithMany(p => p.InverseManager)
                     .HasForeignKey(d => d.ManagerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Employee_EmpManager");
             });
 
