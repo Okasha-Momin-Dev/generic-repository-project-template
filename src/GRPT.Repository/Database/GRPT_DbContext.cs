@@ -113,6 +113,12 @@ namespace GRPT.Repository.Database
                     .HasForeignKey<Employee>(d => d.Id)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Employee_ApplicationUser");
+
+                entity.HasOne(d => d.Manager)
+                    .WithMany(p => p.InverseManager)
+                    .HasForeignKey(d => d.ManagerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Employee_EmpManager");
             });
 
             OnModelCreatingPartial(modelBuilder);
