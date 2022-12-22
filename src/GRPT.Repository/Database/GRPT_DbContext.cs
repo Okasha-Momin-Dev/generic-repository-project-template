@@ -82,7 +82,7 @@ namespace GRPT.Repository.Database
             {
                 entity.ToTable("Employee");
 
-                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
