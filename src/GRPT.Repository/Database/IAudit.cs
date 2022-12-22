@@ -13,4 +13,9 @@ namespace GRPT.Repository.Database
         public int UpdatedBy { get; set; }
         public DateTime UpdatedOn { get; set; }
     }
+
+    public partial class ApplicationUser : IAudit { }
+    public partial class ApplicationRole : IAudit { }
+    public partial class Department : IAudit { }
+    public partial class Employee : IAudit { }
 }
