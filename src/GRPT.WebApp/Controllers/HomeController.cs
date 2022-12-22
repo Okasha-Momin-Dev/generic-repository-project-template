@@ -1,8 +1,8 @@
-﻿using GenericRepositoryPatternTemplate.WebApp.Models;
+﻿using GRPT.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace GenericRepositoryPatternTemplate.WebApp.Controllers
+namespace GRPT.WebApp.Controllers
 {
     public class HomeController : Controller
     {

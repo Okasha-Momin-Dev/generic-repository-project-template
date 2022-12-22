@@ -1,4 +1,4 @@
-namespace GenericRepositoryPatternTemplate.WebApp.Models
+namespace GRPT.WebApp.Models
 {
     public class ErrorViewModel
     {

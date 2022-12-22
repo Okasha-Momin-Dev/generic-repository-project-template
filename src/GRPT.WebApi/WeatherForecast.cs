@@ -1,4 +1,4 @@
-namespace GenericRepositoryPatternTemplate.Api
+namespace GRPT.WebApi
 {
     public class WeatherForecast
     {

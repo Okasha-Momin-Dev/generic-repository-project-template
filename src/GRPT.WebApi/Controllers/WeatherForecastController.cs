@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace GenericRepositoryPatternTemplate.Api.Controllers
+namespace GRPT.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
