@@ -1,10 +1,14 @@
 ﻿using GRPT.Helper;
+using GRPT.Model.Common;
 using GRPT.Repository;
 using GRPT.Repository.Database;
 using GRPT.Service;
 using GRPT.Service.Interfaces;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using System.Net;
 
 namespace GRPT.WebApi.Common
 {
@@ -56,6 +60,10 @@ namespace GRPT.WebApi.Common
                     }
                 });
             });
+
+            services.AddLogging(configure => configure.AddSerilog());
+            
+
         }
 
 
@@ -84,7 +92,7 @@ namespace GRPT.WebApi.Common
             });
         }
 
-        public static void ServiceConfigurations(this IServiceCollection services)
+        internal static void ServiceConfigurations(this IServiceCollection services)
         {
             services.AddScoped<IEmployeeService, EmployeeService>();
         }
@@ -103,7 +111,7 @@ namespace GRPT.WebApi.Common
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.ExceptionHandlerConfiguration();
             app.UseHttpsRedirection();
             app.UseRouting();
 
@@ -115,6 +123,7 @@ namespace GRPT.WebApi.Common
             {
                 endpoints.MapControllers();
             });
+
         }
 
         /// <summary>
@@ -124,6 +133,24 @@ namespace GRPT.WebApi.Common
         internal static void ConfigureAutoMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(AutoMapProfile));
+        }
+
+
+        internal static void ExceptionHandlerConfiguration(this WebApplication app)
+        {
+            app.UseExceptionHandler(appError =>
+            {
+                appError.Run(async context =>
+                {
+                    context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    if (contextFeature != null)
+                    {
+                        await context.Response.WriteAsync(new ApiResponseModel(HttpStatusCode.InternalServerError, contextFeature.Error.GetBaseException().Message).ToJson());
+                    }
+                });
+            });
         }
     }
 }

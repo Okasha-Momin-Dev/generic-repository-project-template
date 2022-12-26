@@ -167,7 +167,7 @@ namespace GRPT.Repository
         {
             entity.UpdatedOn = DateTime.Now;
             entity.UpdatedBy = updatedBy;
-            _context.Set<T>().Update(entity);
+            await Task.Run(() => _context.Set<T>().Update(entity));
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace GRPT.Repository
                 entity.UpdatedOn = DateTime.Now;
                 entity.UpdatedBy = updatedBy;
             }
-            _context.Set<T>().UpdateRange(entities);
+            await Task.Run(() => _context.Set<T>().UpdateRange(entities));
         }
 
         #endregion
@@ -198,7 +198,7 @@ namespace GRPT.Repository
         /// <returns></returns>
         public async Task Delete<T>(T entity) where T : class, IAudit
         {
-            _context.Set<T>().Remove(entity);
+            await Task.Run(() => _context.Set<T>().Remove(entity));
         }
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace GRPT.Repository
         /// <returns></returns>
         public async Task DeleteRange<T>(IEnumerable<T> entities) where T : class, IAudit
         {
-            _context.Set<T>().RemoveRange(entities);
+            await Task.Run(() => _context.Set<T>().RemoveRange(entities));
         }
 
         #endregion
@@ -225,7 +225,7 @@ namespace GRPT.Repository
         {
             entity.UpdatedOn = DateTime.Now;
             entity.UpdatedBy = updatedBy;
-            _context.Set<T>().Update(entity);
+            await Task.Run(() => _context.Set<T>().Update(entity));
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace GRPT.Repository
                 entity.UpdatedOn = DateTime.Now;
                 entity.UpdatedBy = updatedBy;
             }
-            _context.Set<T>().UpdateRange(entities);
+            await Task.Run(() => _context.Set<T>().UpdateRange(entities));
         }
 
 
