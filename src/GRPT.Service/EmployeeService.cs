@@ -29,20 +29,13 @@ namespace GRPT.Service
         /// <returns></returns>
         public async Task<ServiceResponse<IEnumerable<EmployeeResponseModel>>> GetAllEmployees()
         {
-            try
-            {
-                var data = await _repository.GetAllAsync<Employee>(
-                    x => x.Dept,
-                    y => y.Manager);
+            var data = await _repository.GetAllAsync<Employee>(
+                x => x.Dept,
+                y => y.Manager);
 
 
-                var response = _mapper.Map<IEnumerable<EmployeeResponseModel>>(data);
-                return new ServiceResponse<IEnumerable<EmployeeResponseModel>>(response, $"{response.Count()} Employee records found!");
-            }
-            catch (Exception ex)
-            {
-                return new ServiceResponse<IEnumerable<EmployeeResponseModel>>(ex, ex.Message);
-            }
+            var response = _mapper.Map<IEnumerable<EmployeeResponseModel>>(data);
+            return new ServiceResponse<IEnumerable<EmployeeResponseModel>>(response, $"{response.Count()} Employee records found!");
 
         }
 
@@ -53,22 +46,15 @@ namespace GRPT.Service
         /// <returns></returns>
         public async Task<ServiceResponse<EmployeeResponseModel>> GetEmployee(int id)
         {
-            try
-            {
-                var data = await _repository.GetAsync<Employee>(x => x.Id == id,
-                    y => y.Dept,
-                    z => z.Manager);
+            var data = await _repository.GetAsync<Employee>(x => x.Id == id,
+                y => y.Dept,
+                z => z.Manager);
 
-                if (data == null)
-                    return new ServiceResponse<EmployeeResponseModel>($"Employee's record not found!");
+            if (data == null)
+                return new ServiceResponse<EmployeeResponseModel>($"Employee's record not found!");
 
-                var response = _mapper.Map<EmployeeResponseModel>(data);
-                return new ServiceResponse<EmployeeResponseModel>(response, $"{response.EmpName} Employee records found!");
-            }
-            catch (Exception ex)
-            {
-                return new ServiceResponse<EmployeeResponseModel>(ex, ex.Message);
-            }
+            var response = _mapper.Map<EmployeeResponseModel>(data);
+            return new ServiceResponse<EmployeeResponseModel>(response, $"{response.EmpName} Employee records found!");
         }
 
         /// <summary>
@@ -78,34 +64,27 @@ namespace GRPT.Service
         /// <returns></returns>
         public async Task<ServiceResponse<EmployeeResponseModel>> AddEmployee(EmployeeRequestModel employee)
         {
-            try
+            if (await _repository.IsExistsAsync<Employee>(x => x.EmpName == employee.EmpName && x.EmpCode == employee.EmpCode))
+                return new ServiceResponse<EmployeeResponseModel>("This employee already exists!");
+
+            var applicationUser = new ApplicationUser
             {
-                if (await _repository.IsExistsAsync<Employee>(x => x.EmpName == employee.EmpName && x.EmpCode == employee.EmpCode))
-                    return new ServiceResponse<EmployeeResponseModel>("This employee already exists!");
-
-                var applicationUser = new ApplicationUser
-                {
-                    Username = employee.EmpName,
-                    PasswordHash = Utility.EncryptPassword(employee.EmpCode),
-                    RoleRid = 1,
-                    CreatedBy = employee.CreatedBy,
-                };
+                Username = employee.EmpName,
+                PasswordHash = Utility.EncryptPassword(employee.EmpCode),
+                RoleRid = 1,
+                CreatedBy = employee.CreatedBy,
+            };
 
 
-                await _repository.AddAsync(applicationUser, applicationUser.CreatedBy);
-                await _repository.SaveChangesAsync();
+            await _repository.AddAsync(applicationUser, applicationUser.CreatedBy);
+            await _repository.SaveChangesAsync();
 
-                var dbObject = _mapper.Map<Employee>(employee);
-                dbObject.Id = applicationUser.Id; 
-                await _repository.AddAsync(dbObject, dbObject.CreatedBy);
-                await _repository.SaveChangesAsync();
+            var dbObject = _mapper.Map<Employee>(employee);
+            dbObject.Id = applicationUser.Id;
+            await _repository.AddAsync(dbObject, dbObject.CreatedBy);
+            await _repository.SaveChangesAsync();
 
-                return new ServiceResponse<EmployeeResponseModel>(_mapper.Map<EmployeeResponseModel>(dbObject), "Employee record has been added successfully!");
-            }
-            catch (Exception ex)
-            {
-                return new ServiceResponse<EmployeeResponseModel>(ex, ex.Message);
-            }
+            return new ServiceResponse<EmployeeResponseModel>(_mapper.Map<EmployeeResponseModel>(dbObject), "Employee record has been added successfully!");
         }
 
         /// <summary>
@@ -115,26 +94,19 @@ namespace GRPT.Service
         /// <returns></returns>
         public async Task<ServiceResponse<EmployeeResponseModel>> UpdateEmployee(EmployeeRequestModel employee)
         {
-            try
-            {
-                if (await _repository.IsExistsAsync<Employee>(x => x.Id != employee.Id && x.EmpName == employee.EmpName && x.EmpCode == employee.EmpCode))
-                    return new ServiceResponse<EmployeeResponseModel>("This employee already exists!");
+            if (await _repository.IsExistsAsync<Employee>(x => x.Id != employee.Id && x.EmpName == employee.EmpName && x.EmpCode == employee.EmpCode))
+                return new ServiceResponse<EmployeeResponseModel>("This employee already exists!");
 
-                var dbObject = await _repository.GetAsync<Employee>(x => x.Id == employee.Id);
-                if (dbObject is null)
-                    return new ServiceResponse<EmployeeResponseModel>("Employee not found!");
+            var dbObject = await _repository.GetAsync<Employee>(x => x.Id == employee.Id);
+            if (dbObject is null)
+                return new ServiceResponse<EmployeeResponseModel>("Employee not found!");
 
-                _mapper.Map(employee, dbObject);
-                await _repository.Update(dbObject, dbObject.UpdatedBy);
-                await _repository.SaveChangesAsync();
+            _mapper.Map(employee, dbObject);
+            await _repository.Update(dbObject, dbObject.UpdatedBy);
+            await _repository.SaveChangesAsync();
 
 
-                return new ServiceResponse<EmployeeResponseModel>(_mapper.Map<EmployeeResponseModel>(dbObject), "Employee record has been updated successfully!");
-            }
-            catch (Exception ex)
-            {
-                return new ServiceResponse<EmployeeResponseModel>(ex, ex.Message);
-            }
+            return new ServiceResponse<EmployeeResponseModel>(_mapper.Map<EmployeeResponseModel>(dbObject), "Employee record has been updated successfully!");
         }
 
 
@@ -145,23 +117,15 @@ namespace GRPT.Service
         /// <returns></returns>
         public async Task<ServiceResponse<bool>> DeleteEmployee(int id)
         {
-            try
-            {
-                var dbObject = await _repository.GetAsync<Employee>(x => x.Id == id);
-                if (dbObject is null)
-                    return new ServiceResponse<bool>("Employee not found!");
+            var dbObject = await _repository.GetAsync<Employee>(x => x.Id == id);
+            if (dbObject is null)
+                return new ServiceResponse<bool>("Employee not found!");
 
-                await _repository.Delete(dbObject);
-                await _repository.SaveChangesAsync();
+            await _repository.Delete(dbObject);
+            await _repository.SaveChangesAsync();
 
-                return new ServiceResponse<bool>(true, "Employee record deleted successfully!");
+            return new ServiceResponse<bool>(true, "Employee record deleted successfully!");
 
-
-            }
-            catch (Exception ex)
-            {
-                return new ServiceResponse<bool>(ex, ex.Message);
-            }
         }
     }
 }

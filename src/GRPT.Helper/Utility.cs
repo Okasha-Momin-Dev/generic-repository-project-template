@@ -22,5 +22,16 @@
             string result = new String(decoded_char);
             return result;
         }
+
+
+        public static string ToJson<T>(this T data)
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(data);
+        }
+
+        public static T ToObject<T>(this string json)
+        {
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
+        }
     }
 }

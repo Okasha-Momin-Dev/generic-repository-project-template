@@ -17,7 +17,6 @@ namespace GRPT.WebApi.Controllers
             return new ApiResponseModel(
                 serviceResponse.HasValidationError ? HttpStatusCode.Conflict : serviceResponse.Exception != null ? HttpStatusCode.InternalServerError : HttpStatusCode.OK,
                 serviceResponse.Message,
-                serviceResponse.Exception,
                 serviceResponse.Data
                 );
         }
