@@ -1,5 +1,6 @@
 ﻿namespace GRPT.Helper
 {
+
     public static class Utility
     {
 
@@ -32,6 +33,22 @@
         public static T ToObject<T>(this string json)
         {
             return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(json);
+        }
+
+
+        public enum HttpActions
+        {
+            Get,
+            Post,
+            Put,
+            Delete,
+        }
+
+        public enum DataListType
+        {
+            Employee,
+            EmployeeWithEmployeeCode,
+            Department
         }
     }
 }
