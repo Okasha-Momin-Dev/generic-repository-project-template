@@ -95,6 +95,7 @@ namespace GRPT.WebApi.Common
         internal static void ServiceConfigurations(this IServiceCollection services)
         {
             services.AddScoped<IEmployeeService, EmployeeService>();
+            services.AddScoped<ICommonService, CommonService>();
         }
 
 

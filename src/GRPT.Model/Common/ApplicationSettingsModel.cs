@@ -10,5 +10,6 @@ namespace GRPT.Model.Common
     {
         public const string ApplicationSettings = "ApplicationSettings";
 
+        public string ApiBaseUrl { get; set; }
     }
 }

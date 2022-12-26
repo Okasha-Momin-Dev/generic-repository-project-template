@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GRPT.Helper
 {
-    public class AutoMapProfile :Profile
+    public class AutoMapProfile : Profile
     {
         public AutoMapProfile()
         {
@@ -22,7 +22,20 @@ namespace GRPT.Helper
                     .ReverseMap();
 
 
-        #endregion
+            #endregion
+
+            #region DataList Mappings
+
+            CreateMap<Employee, DropdownDtoModel>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.EmpName} ({src.EmpCode})"))
+                .ReverseMap();
+
+            CreateMap<Department, DropdownDtoModel>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.DeptName))
+                .ReverseMap();
+
+            #endregion
+
         }
     }
 }

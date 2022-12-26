@@ -6,4 +6,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GRPT.Helper\GRPT.Helper.csproj" />
+    <ProjectReference Include="..\GRPT.Model\GRPT.Model.csproj" />
+  </ItemGroup>
+
 </Project>
